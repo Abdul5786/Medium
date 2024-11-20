@@ -11,10 +11,12 @@ import com.Abdul.Medium.repositories.PostRepo;
 import com.Abdul.Medium.repositories.UserRepo;
 import com.Abdul.Medium.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,7 +99,42 @@ public class PostServiceImpl implements PostService
 
     }
 
-      public Post dtoToPost(PostDto postDto)
+    @Override
+    public String likedPost(Integer postId, Integer userId)
+    {
+        Post post = postRepo.findById(postId).orElseThrow(() -> new ResourceNoutFoundException("post", "postId", +postId));
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNoutFoundException("user", "userId", +userId));
+        post.addLike(user);
+        post.incrementLikeCount();
+        postRepo.save(post);
+        return" liked " ;
+    }
+
+    @Override
+    public  String unLikePost(Integer postId, Integer userId) {
+        Post post = postRepo.findById(postId).orElseThrow(() -> new ResourceNoutFoundException("post", "postId", +postId));
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNoutFoundException("user", "userId", +userId));
+        post.removeLike(user);
+        post.decrementLikeCount();
+        postRepo.save(post);
+        return "unliked";
+    }
+
+    @Override
+    public String getTotalLikesOfPost(Integer postId)
+    {
+        Post post = postRepo.findById(postId).orElseThrow(() -> new ResourceNoutFoundException("post", "postId", +postId));
+        int size = post.getLikedBy().size();
+        return "total likes on post " +size;
+    }
+
+    @Override
+    public ResponseEntity<Set<User>> getListOfLikesByUsers(Integer postId)
+    {
+        return null;
+    }
+
+    public Post dtoToPost(PostDto postDto)
       {
           return  this.modelmapper.modelMapper().map(postDto, Post.class);
       }
@@ -105,4 +142,11 @@ public class PostServiceImpl implements PostService
       {
           return this.modelmapper.modelMapper().map(post,PostDto.class);
       }
+
+
+
+
 }
+
+
+

@@ -67,5 +67,23 @@ public class PostControlller
         return ResponseEntity.ok(UpdatedPost);
     }
 
+    @PostMapping
+    public String  likePost(@PathVariable Integer postId,@PathVariable Integer userId)
+    {
+         return postService.likedPost(postId, userId);
+    }
+
+    @PutMapping
+    public String unLLikePost(@PathVariable Integer postId, @PathVariable Integer useerId)
+    {
+        return postService.unLikePost(postId,useerId);
+    }
+
+    @GetMapping
+    public String getTotalLikesOnPost(@PathVariable Integer postId)
+    {
+        String totalLikesOfPost = postService.getTotalLikesOfPost(postId);
+        return totalLikesOfPost;
+    }
 
 }

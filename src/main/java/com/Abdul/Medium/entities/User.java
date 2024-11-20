@@ -29,26 +29,13 @@ public class User implements Serializable
       @Column(name="user_about",nullable = false,length = 100)
       private String about;
 
-      public List<Post> getPostList() {
-          return postList;
-      }
-
-      public void setPostList(List<Post> postList) {
-          this.postList = postList;
-      }
-
-      public List<Comments> getComments() {
-          return comments;
-      }
-
-      public void setComments(List<Comments> comments) {
-          this.comments = comments;
-      }
+      @ManyToMany(mappedBy = "likedBy")
+      private Set<Post> likedPosts = new HashSet<>();
 
       @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
        List<Post> postList= new ArrayList<>();
 
-       @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+      @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
        List<Comments> comments=new ArrayList<>();
 
       public int getId() {
@@ -89,5 +76,21 @@ public class User implements Serializable
 
       public String getAbout() {
           return about;
+      }
+
+      public List<Post> getPostList() {
+      return postList;
+  }
+
+      public void setPostList(List<Post> postList) {
+          this.postList = postList;
+      }
+
+      public List<Comments> getComments() {
+          return comments;
+      }
+
+      public void setComments(List<Comments> comments) {
+          this.comments = comments;
       }
   }
