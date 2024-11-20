@@ -21,37 +21,44 @@ public class Post
     @Column(name="content",nullable = false,length =10000)
     private String Content;
     private String image;
-   private Date addedDate;
+    private Date addedDate;
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "postId=" + postId +
-                ", title='" + title + '\'' +
-                ", Content='" + Content + '\'' +
-                ", image='" + image + '\'' +
-                ", addedDate=" + addedDate +
-                ", category=" + category +
-                ", user=" + user +
-                ", comments=" + comments +
-                '}';
-    }
-
-    public Date getAddedDate() {
-        return addedDate;
-    }
-
-    public void setAddedDate(Date addedDate) {
-        this.addedDate = addedDate;
-    }
-
-    @ManyToOne
+   @ManyToOne
     private Category category;
     @ManyToOne
     private User user;
 
     @OneToMany(mappedBy = "post" , cascade = CascadeType.ALL)
     private Set<Comments> comments = new HashSet<>();
+
+    @ManyToMany
+    private Set<User> likedBy= new HashSet<>();
+
+
+    // New field to store the number of likes
+    @Column(name = "like_count", nullable = false)
+    private int likeCount = 0; // Default value is 0
+
+    // Helper method to add a like
+    public void addLike(User user) {
+        likedBy.add(user);
+    }
+
+    // Helper method to remove a like
+    public void removeLike(User user) {
+        likedBy.remove(user);
+    }
+
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decrementLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
+    }
+
 
     public int getPostId() {
         return postId;
@@ -63,6 +70,14 @@ public class Post
 
     public String getTitle() {
         return title;
+    }
+
+    public Date getAddedDate() {
+        return addedDate;
+    }
+
+    public void setAddedDate(Date addedDate) {
+        this.addedDate = addedDate;
     }
 
     public void setTitle(String title) {
@@ -99,5 +114,29 @@ public class Post
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Comments> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comments> comments) {
+        this.comments = comments;
+    }
+
+    public Set<User> getLikedBy() {
+        return likedBy;
+    }
+
+    public void setLikedBy(Set<User> likedBy) {
+        this.likedBy = likedBy;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
     }
 }
