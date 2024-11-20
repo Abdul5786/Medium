@@ -71,6 +71,13 @@ public class CategoryServiceImpl implements CategoryService
 
     }
 
+    @Override
+    public List<CategoryDto> getCategoriesByName(String categoryByName)
+    {
+        // done by Abid
+        return null;
+    }
+
     public Category dtoToCategory(CategoryDto catDto)
     {
         return this.modelMapper.modelMapper().map(catDto,Category.class);
@@ -79,6 +86,9 @@ public class CategoryServiceImpl implements CategoryService
     {
         return  this.modelMapper.modelMapper().map(cat,CategoryDto.class);
     }
+
+
+
 
 
 }

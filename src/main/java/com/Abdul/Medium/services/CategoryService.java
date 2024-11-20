@@ -21,4 +21,6 @@ public interface CategoryService
     void deleteCategory(Integer catId);
     List<String> getAllTitle();
 
+    List<CategoryDto> getCategoriesByName(String categoryByName);
+
 }
