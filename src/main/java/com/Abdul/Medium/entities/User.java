@@ -3,6 +3,7 @@ package com.Abdul.Medium.entities;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name="user_table")
 @NoArgsConstructor
-public class User
+public class User implements Serializable
   {
       @Id
       @GeneratedValue(strategy = GenerationType.IDENTITY)

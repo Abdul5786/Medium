@@ -6,6 +6,8 @@ import com.Abdul.Medium.services.UserService;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +23,15 @@ public class UserController
     UserService userService;
 
     @PostMapping(value = "/create")
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto)
+    @CachePut(value = "users", key = "#userDto.id")
+    public UserDto createUser(@Valid @RequestBody UserDto userDto)
     {
-        UserDto userdto = userService.createUser(userDto);
-        return new ResponseEntity<>(userdto, HttpStatus.CREATED);
+        return userService.createUser(userDto);
     }
 
+
     @PutMapping(value = "/update/{userId}")
+    @Cacheable(value = "users",key="#userId")
     public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer userId)
     {
         UserDto updateUser = userService.updateUser(userDto, userId);
@@ -35,10 +39,11 @@ public class UserController
     }
 
     @GetMapping( value = "/{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Integer userId)
+    @Cacheable(value = "users",key="#userId")
+    public  UserDto getUser(@PathVariable Integer userId)
     {
-        UserDto userById = userService.getUserById(userId);
-        return ResponseEntity.ok(userById);
+         return userService.getUserById(userId);
+
     }
 
     @GetMapping(value = "/getAllUsers")

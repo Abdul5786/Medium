@@ -6,10 +6,15 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 
 @NoArgsConstructor
-public class UserDto
+public class UserDto implements Serializable
 {
+
+
+    private static final long serialVersionUID = 1L;
     private int id;
 
 
