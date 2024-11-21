@@ -32,6 +32,11 @@ public class Post
     private Set<Comments> comments = new HashSet<>();
 
     @ManyToMany
+    @JoinTable(
+            name = "post_table_liked_by",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private Set<User> likedBy= new HashSet<>();
 
 

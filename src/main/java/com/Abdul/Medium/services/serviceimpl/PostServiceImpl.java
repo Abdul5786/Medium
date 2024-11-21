@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -35,13 +36,13 @@ public class PostServiceImpl implements PostService
     UserServiceImpl userService;
 
     @Override
-    public PostDto createPost(PostDto postDto, Integer userId, Integer catId)
+    public PostDto createPost(PostDto postDto, Integer userId)
     {
         User user1 = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNoutFoundException("user", "userId", +userId));
-        Category category1 = this.categoryRepo.findById(catId).orElseThrow(() -> new ResourceNoutFoundException("category", "categoryId", +catId));
+//        Category category1 = this.categoryRepo.findById(catId).orElseThrow(() -> new ResourceNoutFoundException("category", "categoryId", +catId));
 //        System.out.println(category1);
         Post post = this.dtoToPost(postDto);
-        post.setCategory(category1);
+//        post.setCategory(category1);
         post.setUser(user1);
         post.setAddedDate(new Date());
         Post save = postRepo.save(post);
@@ -104,21 +105,28 @@ public class PostServiceImpl implements PostService
     {
         Post post = postRepo.findById(postId).orElseThrow(() -> new ResourceNoutFoundException("post", "postId", +postId));
         User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNoutFoundException("user", "userId", +userId));
-        post.addLike(user);
-        post.incrementLikeCount();
-        postRepo.save(post);
-        return" liked " ;
+
+        // Check if the user has already liked the post
+        if(post.getLikedBy().contains(user))
+        {
+            // If the user has liked the post, unlike it
+            post.removeLike(user);
+            post.decrementLikeCount();
+            postRepo.save(post);
+            return "unliked";
+        }
+
+        else
+        {
+            // If the user has not liked the post, like it
+            post.addLike(user);
+            post.incrementLikeCount();
+            postRepo.save(post);
+            return "liked";
+        }
+
     }
 
-    @Override
-    public  String unLikePost(Integer postId, Integer userId) {
-        Post post = postRepo.findById(postId).orElseThrow(() -> new ResourceNoutFoundException("post", "postId", +postId));
-        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNoutFoundException("user", "userId", +userId));
-        post.removeLike(user);
-        post.decrementLikeCount();
-        postRepo.save(post);
-        return "unliked";
-    }
 
     @Override
     public String getTotalLikesOfPost(Integer postId)
@@ -129,11 +137,13 @@ public class PostServiceImpl implements PostService
     }
 
     @Override
-    public ResponseEntity<Set<User>> getListOfLikesByUsers(Integer postId)
-    {
-        return null;
+    public Set<User> getListOfLikesByUsers(Integer postId) {
+        Set<User> usersLikesOnPost = postRepo.findUsersLikesOnPost(postId);
+        if (usersLikesOnPost != null && !usersLikesOnPost.isEmpty()) {
+            return usersLikesOnPost;
+        }
+        return Collections.emptySet();  // Return an empty set if no likes or if null
     }
-
     public Post dtoToPost(PostDto postDto)
       {
           return  this.modelmapper.modelMapper().map(postDto, Post.class);

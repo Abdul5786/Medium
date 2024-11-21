@@ -1,6 +1,6 @@
 package com.Abdul.Medium.controllers;
 
-import com.Abdul.Medium.payloads.CategoryDto;
+import com.Abdul.Medium.entities.User;
 import com.Abdul.Medium.payloads.PostDto;
 import com.Abdul.Medium.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,25 +9,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/post")
-public class PostControlller
+public class PostController
 {
     @Autowired
       PostService postService;
 
     // create post
-    @PostMapping(value = "/createpost/user/{userId}/category/{catId}")
-     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto, @PathVariable  Integer userId, @PathVariable Integer catId)
+    @PostMapping(value = "/createPost/user/{userId}")
+     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto, @PathVariable  Integer userId)
      {
-         PostDto post = postService.createPost(postDto, userId, catId);
+         PostDto post = postService.createPost(postDto, userId);
          System.out.println(post);
          return  new ResponseEntity<>(post, HttpStatus.CREATED);
      }
 
      // get all post
-     @GetMapping(value = "/getpost")
+     @GetMapping(value = "/getPost")
      public ResponseEntity<List<PostDto>>  getAllPost()
      {
          List<PostDto> allPost = postService.getAllPost();
@@ -67,23 +68,24 @@ public class PostControlller
         return ResponseEntity.ok(UpdatedPost);
     }
 
-    @PostMapping
+    @PostMapping(value = "/toggleLike/post/{postId}/user/{userId}")
     public String  likePost(@PathVariable Integer postId,@PathVariable Integer userId)
     {
          return postService.likedPost(postId, userId);
     }
 
-    @PutMapping
-    public String unLLikePost(@PathVariable Integer postId, @PathVariable Integer useerId)
-    {
-        return postService.unLikePost(postId,useerId);
-    }
-
-    @GetMapping
+    @GetMapping(value = "/totalLikes/{postId}")
     public String getTotalLikesOnPost(@PathVariable Integer postId)
     {
         String totalLikesOfPost = postService.getTotalLikesOfPost(postId);
         return totalLikesOfPost;
+    }
+
+    @GetMapping(value = "/listOfUserWhoLikeThePost/{postId}")
+   public ResponseEntity<Set<User>> getListOfUserWhoLikedThePost(@PathVariable Integer postId)
+    {
+        Set<User> listOfLikesByUsers = postService.getListOfLikesByUsers(postId);
+        return ResponseEntity.ok(listOfLikesByUsers);
     }
 
 }
