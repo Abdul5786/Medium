@@ -82,10 +82,11 @@ public class PostController
     }
 
     @GetMapping(value = "/listOfUserWhoLikeThePost/{postId}")
-   public ResponseEntity<Set<User>> getListOfUserWhoLikedThePost(@PathVariable Integer postId)
+   public ResponseEntity<Set<String>> getListOfUserWhoLikedThePost(@PathVariable Integer postId)
     {
-        Set<User> listOfLikesByUsers = postService.getListOfLikesByUsers(postId);
+        Set<String> listOfLikesByUsers = postService.getListOfLikesByUsers(postId);
         return ResponseEntity.ok(listOfLikesByUsers);
+
     }
 
 }

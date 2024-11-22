@@ -137,13 +137,14 @@ public class PostServiceImpl implements PostService
     }
 
     @Override
-    public Set<User> getListOfLikesByUsers(Integer postId) {
-        Set<User> usersLikesOnPost = postRepo.findUsersLikesOnPost(postId);
+    public Set<String> getListOfLikesByUsers(Integer postId) {
+        Set<String> usersLikesOnPost = postRepo.findUsersLikesOnPost(postId);
         if (usersLikesOnPost != null && !usersLikesOnPost.isEmpty()) {
             return usersLikesOnPost;
         }
-        return Collections.emptySet();  // Return an empty set if no likes or if null
+        return Collections.emptySet(); // Added the missing semicolon
     }
+
     public Post dtoToPost(PostDto postDto)
       {
           return  this.modelmapper.modelMapper().map(postDto, Post.class);

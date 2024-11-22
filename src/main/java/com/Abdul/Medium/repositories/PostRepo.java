@@ -20,8 +20,8 @@ public interface PostRepo extends JpaRepository<Post,Integer>
 
         List<Post> findByCategory(Category category);
 
-    @Query(value = "SELECT u FROM User u JOIN u.likedPosts pl WHERE pl.id = :postId", nativeQuery = true)
-    Set<User> findUsersLikesOnPost(@Param("postId") Integer postId);
+    @Query(value = "SELECT u.name FROM User u JOIN u.likedPosts pl WHERE pl.id = :postId")
+    Set<String> findUsersLikesOnPost(@Param("postId") Integer postId);
 
 }
 

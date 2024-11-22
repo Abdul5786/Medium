@@ -29,7 +29,7 @@ public interface PostService
     public String likedPost(Integer postId, Integer userId);
     public String  getTotalLikesOfPost(Integer postId);
 
-    public Set<User> getListOfLikesByUsers(Integer postId);
+    public Set<String> getListOfLikesByUsers(Integer postId);
 
 
 }
