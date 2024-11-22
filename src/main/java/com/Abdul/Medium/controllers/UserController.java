@@ -23,7 +23,7 @@ public class UserController
     UserService userService;
 
     @PostMapping(value = "/create")
-    @CachePut(value = "users", key = "#userDto.id")
+//    @CachePut(value = "users", key = "#userDto.id")
     public UserDto createUser(@Valid @RequestBody UserDto userDto)
     {
         return userService.createUser(userDto);
@@ -31,7 +31,7 @@ public class UserController
 
 
     @PutMapping(value = "/update/{userId}")
-    @Cacheable(value = "users",key="#userId")
+//    @Cacheable(value = "users",key="#userId")
     public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer userId)
     {
         UserDto updateUser = userService.updateUser(userDto, userId);
@@ -39,7 +39,7 @@ public class UserController
     }
 
     @GetMapping( value = "/{userId}")
-    @Cacheable(value = "users",key="#userId")
+//    @Cacheable(value = "users",key="#userId")
     public  UserDto getUser(@PathVariable Integer userId)
     {
          return userService.getUserById(userId);

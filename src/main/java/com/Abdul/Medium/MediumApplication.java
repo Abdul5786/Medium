@@ -8,7 +8,7 @@ import org.springframework.ui.ModelMap;
 
 
 @SpringBootApplication
-@EnableCaching
+//@EnableCaching
 public class MediumApplication {
 
 	public static void main(String[] args) {

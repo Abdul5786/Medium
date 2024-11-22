@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 @Entity
-@Table(name="user_table")
+@Table(name="User")
 @NoArgsConstructor
 public class User implements Serializable
   {

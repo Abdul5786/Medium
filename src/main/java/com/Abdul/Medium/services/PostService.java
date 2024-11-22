@@ -11,7 +11,7 @@ public interface PostService
 {
 
     // create post
-    PostDto createPost(PostDto postDto,Integer userId, Integer catId);
+    PostDto createPost(PostDto postDto,Integer userId);
     //update
     PostDto updatePost(PostDto postDto,Integer postId);
     // delete post
@@ -27,12 +27,9 @@ public interface PostService
     List<PostDto> getPostByCategory(Integer categoryId);
 
     public String likedPost(Integer postId, Integer userId);
-
-    public String unLikePost(Integer postId,Integer userId);
-
     public String  getTotalLikesOfPost(Integer postId);
 
-    public ResponseEntity<Set<User>> getListOfLikesByUsers(Integer postId);
+    public Set<String> getListOfLikesByUsers(Integer postId);
 
 
 }
