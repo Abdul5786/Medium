@@ -23,5 +23,10 @@ public interface PostRepo extends JpaRepository<Post,Integer>
     @Query(value = "SELECT u.name FROM User u JOIN u.likedPosts pl WHERE pl.id = :postId")
     Set<String> findUsersLikesOnPost(@Param("postId") Integer postId);
 
+
+
+
+
+
 }
 
